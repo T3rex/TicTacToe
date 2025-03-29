@@ -1,10 +1,11 @@
 package models;
 
 import Exceptions.InvalidCellException;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Data
 public class Board {
     private List<List<Cell>> grid;
 
@@ -30,9 +31,7 @@ public class Board {
     }
 
     public boolean isCellOccupied(Cell cell){
-        int x = cell.getX();
-        int y = cell.getY();
-        return grid.get(x).get(y).getPlayer()!=null;
+        return cell.isOccupied();
     }
 
     public boolean isValidCell(Cell cell){
@@ -51,5 +50,13 @@ public class Board {
             throw new InvalidCellException("Invalid cell");
         }
         return grid.get(x).get(y);
+    }
+
+    public void resetBoard(){
+        for(List<Cell> row: grid){
+            for(Cell cell: row){
+                cell.setPlayer(null);
+            }
+        }
     }
 }

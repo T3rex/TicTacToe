@@ -11,8 +11,9 @@ public class HumanPlayer extends Player{
         super(name, symbol);
     }
 
+
     @Override
-    public Pair<Integer,Integer> makeMove() {
+    public Pair<Integer,Integer> makeMove(Board board) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter position x:");
         Integer x = sc.nextInt();
@@ -22,6 +23,6 @@ public class HumanPlayer extends Player{
     }
 
     void undo(){
-
+        System.out.println("UNDO");
     }
 }

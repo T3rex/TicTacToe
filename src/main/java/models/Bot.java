@@ -1,6 +1,8 @@
 package models;
 
 import lombok.Data;
+import models.factories.BotPlayingStrategyFactory;
+import models.strategies.Bot_Playing_Strategies.BotPlayingStrategy;
 
 import java.util.Random;
 
@@ -8,16 +10,17 @@ import java.util.Random;
 public class Bot extends Player {
 
     private BotLevel level;
+    private BotPlayingStrategy botPlayingStrategy;
 
     public Bot(String name, char symbol,BotLevel level) {
         super(name,symbol);
+        this.level = level;
+        this.botPlayingStrategy = BotPlayingStrategyFactory.getBotPlayingStrategy(level);
     }
 
+
     @Override
-    Pair<Integer,Integer> makeMove() {
-        Random random = new Random();
-        int x = random.nextInt();
-        int y = random.nextInt();
-        return new Pair<>(x,y);
+    Pair<Integer,Integer> makeMove(Board board) {
+        return botPlayingStrategy.makeMove(board);
     }
 }

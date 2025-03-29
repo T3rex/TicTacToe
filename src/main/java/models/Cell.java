@@ -13,6 +13,11 @@ public class Cell {
         this.y = y;
     }
 
+    public Cell(Cell cell){
+        this.x = cell.getX();
+        this.y = cell.getY();
+    }
+
     public void print(){
         if(player!=null){
             System.out.print(" "+ player.getSymbol()+" ");
@@ -20,6 +25,10 @@ public class Cell {
         else{
             System.out.print(" _ ");
         }
+    }
+
+    public boolean isOccupied(){
+        return player!=null;
     }
 
     public void setPlayer(Player player){

@@ -62,15 +62,20 @@ public class Game {
 
     public void makeMove() throws InvalidCellException{
         Player player = players.get(currentPlayer);
+        System.out.println("Player "+player.getName()+"("+player.getSymbol()+")'s turn");
         Pair<Integer, Integer> position;
         Cell cell = null;
 
         while (true) {
             try {
-                position = player.makeMove();
+                position = player.makeMove(this.board);
+                if(position.getX()==null && position.getY()==null){
+                    ((HumanPlayer) player).undo();
+                }
+
                 cell = this.board.getCell(position.getX(), position.getY());
 
-                if (board.isCellOccupied(cell)) {
+                if (cell.isOccupied() || !this.board.isValidCell(cell)) {
                     System.out.println("Cell is occupied. Please choose another position.");
                 } else {
                     break; // Valid and unoccupied cell
@@ -82,11 +87,8 @@ public class Game {
 
         this.board.setPlayer(cell.getX(), cell.getY(),player);
 
-
         Move move = new Move(this.board.getCell(cell.getX(),cell.getY()),player);
         this.moveList.add(move);
-
-
 
         if(playerWonStrategy.checkIfWon(cell)){
             this.status = Gamestatus.WIN;
@@ -97,11 +99,28 @@ public class Game {
             return;
         }
         this.currentPlayer = (this.currentPlayer+1)%players.size();
-
     }
 
     public  Player getWinner(){
         return this.players.get(currentPlayer);
     }
 
+    public void replayGame(){
+        this.board.resetBoard();
+        this.status = Gamestatus.IN_PROGRESS;
+        System.out.println("Replaying the game "+ moveList.size());
+        for(Move move : this.moveList){
+            Cell cell = move.getCell();
+            Player player = move.getPlayer();
+            this.board.setPlayer(cell.getX(), cell.getY(),player);
+            System.out.println("Player "+player.getName()+" made a move on ("+cell.getX()+","+cell.getY() +")");
+            this.board.printBoard();
+            System.out.println("-------------------");
+            if(playerWonStrategy.checkIfWon(cell)){
+                this.status = Gamestatus.WIN;
+                return;
+            }
+        }
+        this.status = Gamestatus.DRAW;
+    }
 }

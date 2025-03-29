@@ -56,5 +56,12 @@ public class Main {
             gameController.printBoard(game);
         }
 
+        if(gameController.getGameStatus(game)!=Gamestatus.IN_PROGRESS){
+            System.out.println("Do you want to replay the whole game?(Y/N)");
+            if(sc.next().charAt(0)=='Y') {
+                game.replayGame();
+            }
+        }
+
     }
 }
